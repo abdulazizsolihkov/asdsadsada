@@ -39,6 +39,14 @@ export const useCalculatorStore = create<CalculatorState>()(
     }),
     {
       name: 'meros-calculator-state',
+      // Never persist result — Fraction class instances lose their methods
+      // after JSON round-trip. PhaseThree recalculates on every mount.
+      partialize: (state) => ({
+        phase: state.phase,
+        estate: state.estate,
+        heirs: state.heirs,
+        wizardStep: state.wizardStep,
+      }),
     },
   ),
 );

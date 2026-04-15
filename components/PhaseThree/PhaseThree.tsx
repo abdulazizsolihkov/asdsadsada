@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useCalculatorStore } from '@/store/calculatorStore';
 import { calculateInheritance } from '@/engine/calculator';
 import { Card, SectionTitle } from '@/components/ui/Card';
@@ -52,13 +52,10 @@ function ShareRow({ share, finalAmount }: { share: HeirShare; finalAmount: numbe
 }
 
 export function PhaseThree() {
-  const { estate, heirs, result, setResult, setPhase, reset, setWizardStep } = useCalculatorStore();
+  const { estate, heirs, setResult, setPhase, reset, setWizardStep } = useCalculatorStore();
   const [showDetails, setShowDetails] = useState(false);
-
-  useEffect(() => {
-    const r = calculateInheritance(estate, heirs);
-    setResult(r);
-  }, [estate, heirs, setResult]);
+  // Always calculate fresh — never use persisted result (Fraction instances don't survive JSON)
+  const result = calculateInheritance(estate, heirs);
 
   if (!result) return <div className="text-center py-10 text-gray-500">Hisoblanmoqda...</div>;
 
